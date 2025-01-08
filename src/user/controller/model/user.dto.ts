@@ -1,14 +1,11 @@
+import { User } from '../../model/user.entity';
+
 export class UserDto {
-  constructor(
-    id: bigint,
-    username: string,
-    firstName: string,
-    lastName: string,
-  ) {
-    this.id = id;
-    this.username = username;
-    this.firstName = firstName;
-    this.lastName = lastName;
+  constructor(user: User) {
+    this.id = user.id;
+    this.username = user.username;
+    this.firstName = user.firstName;
+    this.lastName = user.lastName;
   }
 
   id: bigint;

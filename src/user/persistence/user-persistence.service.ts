@@ -1,6 +1,6 @@
 import { Repository } from 'typeorm';
 import { User } from '../model/user.entity';
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
@@ -10,15 +10,33 @@ export class UserPersistenceService {
     private readonly userRepository: Repository<User>,
   ) {}
 
-  create(user: Partial<User>): Promise<User> {
+  async create(user: Partial<User>): Promise<User> {
     return this.userRepository.save(user);
   }
 
-  findById(id: bigint): Promise<User> {
-    return this.userRepository.findOneBy({ id });
+  async findByIdExistenceAssured(
+    id: bigint,
+    fallbackException: HttpException,
+  ): Promise<User> {
+    const user = await this.userRepository.findOneBy({ id });
+
+    if (user === null) {
+      throw fallbackException;
+    }
+    return user;
   }
 
-  findByUsername(username: string): Promise<User> {
+  async assureUserNotExists(
+    username: string,
+    fallbackException: HttpException,
+  ) {
+    const user = await this.findByUsername(username);
+    if (user !== null) {
+      throw fallbackException;
+    }
+  }
+
+  async findByUsername(username: string): Promise<User> {
     return this.userRepository.findOneBy({ username });
   }
 }
