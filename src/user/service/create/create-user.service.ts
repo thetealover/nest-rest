@@ -13,7 +13,6 @@ export class CreateUserService {
   @Transactional()
   async create(request: CreateUserRequestDto): Promise<User> {
     const username = request.username;
-
     await this.userPersistenceService.assureUserNotExists(
       username,
       new HttpException(

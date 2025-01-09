@@ -1,4 +1,5 @@
 import { User } from '../../model/user.entity';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class UserDto {
   constructor(user: User) {
@@ -8,8 +9,12 @@ export class UserDto {
     this.lastName = user.lastName;
   }
 
+  @ApiProperty()
   id: bigint;
+  @ApiProperty()
   username: string;
+  @ApiProperty()
   firstName: string;
+  @ApiProperty()
   lastName: string;
 }
